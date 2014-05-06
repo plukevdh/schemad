@@ -1,5 +1,6 @@
 require 'active_support/inflector'
 require 'active_support/concern'
+require 'active_support/hash_with_indifferent_access'
 
 module Schemad
   module Extensions
@@ -27,6 +28,10 @@ module Schemad
 
     def classify(string)
       string.to_s.classify
+    end
+
+    def indifferent_hash(hash)
+      ActiveSupport::HashWithIndifferentAccess.new hash
     end
   end
 end

@@ -20,4 +20,10 @@ describe Schemad::Extensions do
 
   When(:const) { ext.send :constantize, "Demo::Foo::Bar" }
   Then { const.should == Demo::Foo::Bar }
+  context "indifferent hash wrapper" do
+    When(:converted) { ext.send :indifferent_hash, {one: 1, "two" => 2, "Three and Four" => 34} }
+    Then { converted["one"].should == 1 }
+    And { converted[:two].should == 2 }
+    And { converted["Three and Four"].should == 34 }
+  end
 end
