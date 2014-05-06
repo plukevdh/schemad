@@ -44,7 +44,7 @@ module Schemad
     string: StringHandler,
     boolean: BooleanHandler,
     integer: IntegerHandler,
-    datetime: TimeHandler,
+    date_time: TimeHandler,
     time: TimeHandler,
     date: TimeHandler
   }

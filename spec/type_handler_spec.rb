@@ -57,7 +57,7 @@ describe Schemad::TypeHandler do
   end
 
   context "can parse dates" do
-    Given(:date_handler) { Schemad::TypeHandler.new(:datetime) }
+    Given(:date_handler) { Schemad::TypeHandler.new(:date_time) }
     Given(:time) { DateTime.now.to_time }
 
     context "knows unix time" do
