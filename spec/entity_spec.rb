@@ -12,7 +12,7 @@ describe Schemad::Entity do
     world: "coordinates",
     cool: true,
     roads: 5,
-    "beasts" => "1337"
+    beasts: "1337"
   }}
 
   context "#from_data" do

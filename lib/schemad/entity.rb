@@ -17,12 +17,13 @@ module Schemad
       @attributes << name
     end
 
+    # expect data hash to have symbol keys at this point
+    # normalizer should standardize this
     def self.from_data(data)
       obj = new
-      indiff = indifferent_hash(data)
 
       @attributes.each do |key|
-        value = obj.send "parse_#{key}", indiff
+        value = obj.send "parse_#{key}", data
         obj.send "#{key}=", value
       end
 
