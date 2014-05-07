@@ -6,6 +6,7 @@ gemspec
 group :test do
   gem 'rspec-given'
   gem 'flexmock'
+  gem 'timecop'
 
   gem 'pry'
 end

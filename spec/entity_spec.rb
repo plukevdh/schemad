@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'timecop'
 require 'schemad/entity'
 
 data = {
@@ -48,6 +49,21 @@ describe Schemad::Entity do
 
     context "defines #? method for bools" do
       Then { ent.should be_cool }
+    end
+
+    context "can get all params as a hash" do
+      before { Timecop.freeze }
+      after { Timecop.return }
+
+      When(:hash) { ent.to_hash }
+      Then { hash.should == {
+        forest: "Green",
+        roads: 50,
+        beasts: 1337,
+        world: "COORDINATES",
+        cool: true,
+        created: Time.now
+      }}
     end
   end
 end

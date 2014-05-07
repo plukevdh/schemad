@@ -33,20 +33,15 @@ module Schemad
       self.class.instance_variable_get(:@attributes)
     end
 
-    # def to_hash
-    #   hash = {}
-    #   schema.keys.each do |key|
-    #     hash[key] = send key
-    #   end
+    def to_hash
+      hash = {}
+      attribute_names.each do |key|
+        hash[key] = send key
+      end
 
-    #   hash.each do |k,v|
-    #     next unless v.is_a? Time
-    #     hash[k] = v.utc.to_i
-    #   end
-
-    #   hash
-    # end
-    # alias_method :attributes, :to_hash
+      hash
+    end
+    alias_method :attributes, :to_hash
 
     private
 
