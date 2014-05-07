@@ -29,7 +29,7 @@ module Schemad
       obj
     end
 
-    def attributes
+    def attribute_names
       self.class.instance_variable_get(:@attributes)
     end
 

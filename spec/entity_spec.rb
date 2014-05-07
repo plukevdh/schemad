@@ -26,7 +26,7 @@ describe Schemad::Entity do
   context "#from_data" do
     Given(:ent) { Ent.from_data(data) }
 
-    Then { ent.attributes.should == [:forest, :roads, :beasts, :world, :cool, :created]}
+    Then { ent.attribute_names.should == [:forest, :roads, :beasts, :world, :cool, :created]}
 
     context "defaults or nil get used when no data" do
       Then { ent.forest.should == "Green" }
