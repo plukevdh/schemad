@@ -2,33 +2,21 @@ require 'spec_helper'
 require 'timecop'
 require 'schemad/entity'
 
-data = {
-  "Middle Earth" => "coordinates",
-  cool: true,
-  roads: 5,
-  "beasts" => "1337",
-}
-
-class Ent < Schemad::Entity
-  attribute :forest, type: :string, default: "Green"
-  attribute :roads, type: :integer do |value|
-    value * 10
-  end
-  attribute :beasts, type: :integer
-  attribute :world, type: :string, key: "Middle Earth" do |value|
-    value.upcase
-  end
-  attribute :cool, type: :boolean
-  attribute :created, type: :date_time, default: -> { Time.now }
-end
+require_relative 'fixtures/demo_class'
 
 describe Schemad::Entity do
   before { Timecop.freeze }
   after { Timecop.return }
 
+  Given(:normal_data) {{
+    world: "coordinates",
+    cool: true,
+    roads: 5,
+    "beasts" => "1337"
+  }}
 
   context "#from_data" do
-    Given(:ent) { Ent.from_data(data) }
+    Given(:ent) { Ent.from_data(normal_data) }
 
     Then { ent.attribute_names.should == [:forest, :roads, :beasts, :world, :cool, :created]}
 
