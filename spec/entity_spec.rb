@@ -23,6 +23,9 @@ class Ent < Schemad::Entity
 end
 
 describe Schemad::Entity do
+  before { Timecop.freeze }
+  after { Timecop.return }
+
 
   context "#from_data" do
     Given(:ent) { Ent.from_data(data) }
@@ -30,17 +33,12 @@ describe Schemad::Entity do
     Then { ent.attribute_names.should == [:forest, :roads, :beasts, :world, :cool, :created]}
 
     context "defaults or nil get used when no data" do
+
       Then { ent.forest.should == "Green" }
       And { ent.cool.should be_true }
-      And { ent.created.to_i.should eq(Time.now.to_i) }
-    end
-
-    context "converters modify data" do
-      Then { ent.roads.should == 50 }
-    end
-
-    context "can alias lookup key" do
-      Then { ent.world.should == "COORDINATES" }
+      And { ent.created.should eq(Time.now) }
+      And { ent.roads.should == 5 }
+      And { ent.world.should == "coordinates" }
     end
 
     context "parses types" do
@@ -52,15 +50,12 @@ describe Schemad::Entity do
     end
 
     context "can get all params as a hash" do
-      before { Timecop.freeze }
-      after { Timecop.return }
-
       When(:hash) { ent.to_hash }
       Then { hash.should == {
         forest: "Green",
-        roads: 50,
+        roads: 5,
         beasts: 1337,
-        world: "COORDINATES",
+        world: "coordinates",
         cool: true,
         created: Time.now
       }}

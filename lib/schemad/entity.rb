@@ -46,13 +46,9 @@ module Schemad
     private
 
     def self.define_parser_for(name, args, &block)
-      lookup = args[:key] || name
-
       define_method "parse_#{name}" do |data|
-        value = data[lookup]
+        value = data[name]
         value ||= get_default(args[:default])
-
-        value = block.call(value) if block_given? && !value.nil?
 
         self.send "#{name}=", coerce_to_type(value, args[:type])
       end
