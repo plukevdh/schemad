@@ -1,11 +1,38 @@
 require 'spec_helper'
+
 require 'schemad/type_handler'
+require 'schemad/abstract_handler'
+
+require 'schemad/types/boolean_handler'
+require 'schemad/types/string_handler'
+require 'schemad/types/time_handler'
+require 'schemad/types/integer_handler'
 
 describe Schemad::TypeHandler do
 
   context "rejects unknown types" do
     When(:typer) { Schemad::TypeHandler.new(:fake_type) }
-    Then { expect(typer).to have_failed(Schemad::TypeHandler::UnknownDataType, /No known handlers for FakeType/) }
+    Then { expect(typer).to have_failed(Schemad::TypeHandler::UnknownHandler, /No known handlers for FakeType/) }
+  end
+
+  context "defaults to string type" do
+    When(:typer) { Schemad::TypeHandler.new }
+    Then { expect(typer.instance_variable_get(:@handler)).to be_a(Schemad::StringHandler) }
+  end
+
+  context "can register custom handlers" do
+    class YouMomHandler < Schemad::AbstractHandler
+      handle :your_mom
+
+      def parse(value)
+        "Your Mom"
+      end
+    end
+
+    Given { Schemad::TypeHandler.register(YouMomHandler) }
+    Given(:typer) { Schemad::TypeHandler.new(:your_mom) }
+    When(:parsed) { typer.parse("Good vs. Evil") }
+    Then { parsed.should == "Your Mom" }
   end
 
   context "can handle bools" do
@@ -24,7 +51,6 @@ describe Schemad::TypeHandler do
         Then { parsed.should be_false }
       end
     end
-
   end
 
   context "can parse integers" do
