@@ -68,8 +68,9 @@ module Schemad
     def find_value(key, data)
       begin
         search_data path_steps(key), indifferent_hash(data)
-      rescue InvalidPath
-        raise InvalidPath, "Can't find value for \"#{key}\""
+      rescue InvalidPath => e
+        # rethrow with more info
+        raise e, "Can't find value for \"#{key}\""
       end
     end
 
