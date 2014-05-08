@@ -1,0 +1,14 @@
+language: ruby
+rvm:
+  - 2.0
+  - 2.1
+  - 1.9.3
+  - rbx
+  - jruby-19mode
+
+matrix:
+  allow_failures:
+    - rvm: rbx
+    - rvm: jruby-19mode
+
+script: bundle exec rake spec
