@@ -265,7 +265,7 @@ require 'schemad'
 
 ## Type Handlers
 
-On a side note, we have a number of very simple type handlers, you can see them all in the various type definitions [type_handler.rb](https://github.com/plukevdh/schemad/tree/master/lib/schemad/types).
+On a side note, we have a number of very simple type handlers, you can see them all in the various type definitions [type_handler](https://github.com/plukevdh/schemad/tree/master/lib/schemad/types).
 
 It is _also_ possible to use these however you want in your own classes, but there are far more complete and complex type handlers elsewhere. If you find these types unsatisfactory or wish to use additional types, you can easily define your own.
 
