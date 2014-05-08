@@ -4,12 +4,17 @@ module Schemad
   class Normalizer
     include Schemad::Extensions
 
+    DELIMITER = "/"
+
+    InvalidPath = Class.new(Exception)
+
     def self.inherited(subclass)
       subclass.instance_variable_set(:@normalizers, {})
+      subclass.instance_variable_set(:@allowed_attributes, [])
     end
 
-    def self.filter_attributes_with(entity)
-      @allowed_attributes = entity.attribute_names
+    def self.include_fields(fields)
+      @allowed_attributes.concat fields
     end
 
     def self.normalize(name, args={}, &block)
@@ -17,9 +22,10 @@ module Schemad
       method_name = normalizer_method_name(name)
 
       @normalizers[lookup] = name
+      @allowed_attributes << lookup
 
       define_method method_name do |data|
-        value = data[lookup]
+        value = find_value lookup, data
         return value unless block_given?
 
         yield value
@@ -29,14 +35,13 @@ module Schemad
     def normalize(data)
       normalized = {}
 
-      data.each do |key, value|
+      allowed_attributes.each do |key|
         to_key = normalizers[key]
-        next unless allowed_attribute?(to_key)
 
         if to_key
           normalized[to_key] = self.send normalizer_method_name(to_key), data
         else
-          normalized[key.to_sym] = value
+          normalized[key_from_path(key)] = find_value(key, data)
         end
       end
 
@@ -52,8 +57,28 @@ module Schemad
     end
 
     private
-    def allowed_attribute?(attr)
-      allowed_attributes.nil? || allowed_attributes.include?(attr)
+    def path_steps(key)
+      key.to_s.split(DELIMITER)
+    end
+
+    def key_from_path(path)
+      path_steps(path).last.to_sym
+    end
+
+    def find_value(key, data)
+      begin
+        search_data path_steps(key), indifferent_hash(data)
+      rescue InvalidPath
+        raise InvalidPath, "Can't find value for \"#{key}\""
+      end
+    end
+
+    def search_data(steps, data)
+      step = steps.shift
+      return data unless step
+      raise InvalidPath if data.nil?
+
+      search_data steps, data[step]
     end
 
     def self.normalizer_method_name(field)

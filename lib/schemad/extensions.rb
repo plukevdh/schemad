@@ -1,5 +1,6 @@
 require 'active_support/inflector'
 require 'active_support/concern'
+require 'active_support/core_ext/hash'
 require 'active_support/hash_with_indifferent_access'
 
 module Schemad
