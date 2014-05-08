@@ -9,7 +9,7 @@ module Schemad
       subclass.instance_variable_set(:@attributes, [])
     end
 
-    def self.attribute(name, args, &block)
+    def self.attribute(name, args={}, &block)
       attr_accessor name
 
       define_parser_for(name, args, &block)
@@ -65,6 +65,8 @@ module Schemad
     end
 
     def coerce_to_type(value, type)
+      type ||= :string
+
       handler = TypeHandler.new type
       handler.parse(value)
     end

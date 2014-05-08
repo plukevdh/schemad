@@ -28,6 +28,7 @@ module Schemad
     end
 
     def classify(string)
+      string = "nil" if string.nil?
       string.to_s.classify
     end
 

@@ -37,6 +37,10 @@ describe Schemad::Entity do
       Then { ent.should be_cool }
     end
 
+    context "assumes string if no type given" do
+      Then { ent.world.should be_a(String) }
+    end
+
     context "can get all params as a hash" do
       When(:hash) { ent.to_hash }
       Then { hash.should == {
