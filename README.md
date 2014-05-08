@@ -1,5 +1,7 @@
 # Schemad
 
+[![Gem Version](https://badge.fury.io/rb/schemad.svg)](http://badge.fury.io/rb/schemad)
+
 Schemad is a simple metagem to aid integrating legacy or third-party datasets into other projects. It's especially geared towards unifying multiple datasets into consistent data structures for ease of and consistency in use.
 
 This gem has two main parts: Normalizers and Entities.
