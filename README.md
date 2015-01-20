@@ -9,7 +9,7 @@ This gem has two main parts: Normalizers and Entities.
 
 ## Normalizers
 
-Normalizers are the translators between different datasets. They take misshaped data and help mold it into a consistent form before turning them into objects for general use. 
+Normalizers are the translators between different datasets. They take misshaped data and help mold it into a consistent form before turning them into objects for general use.
 
 For example, let's say I want to pull commit data from [GitHub](https://github.com) and [BitBucket](https://bitbucket.org) and do something with the two datasets. Let's look at the API for both and the kind of data they return for a commit object.
 
@@ -170,7 +170,7 @@ github_data = JSON.parse(raw_json)
 parsed = GitHubNormalizer.new.normalize(github_data)
 ```
 
-And we should then have a plain hash much like the following: 
+And we should then have a plain hash much like the following:
 
 ```ruby
 {
@@ -208,7 +208,7 @@ Now the normalizer will use the raw field and pick out the email using a regex m
 
 ## Entities
 
-Entities provide consistent [value objects](http://martinfowler.com/bliki/ValueObject.html) that allow for easily transporting the data to functionality that uses the data. Entities are very limited in functionality and are mainly meant to provide a more ruby-ish means of accessing the data. We _could_ pass around the normalized hashes, but typically, we rubyists like having method access to our data: 
+Entities provide consistent [value objects](http://martinfowler.com/bliki/ValueObject.html) that allow for easily transporting the data to functionality that uses the data. Entities are very limited in functionality and are mainly meant to provide a more ruby-ish means of accessing the data. We _could_ pass around the normalized hashes, but typically, we rubyists like having method access to our data:
 
 ```ruby
 commit.comment        # "added readme, because im a good github citizen\n"
@@ -216,7 +216,7 @@ commit.id             # "7638417db6d59f3c431d3e1f261cc637155684cd"
 comment.created_date  # A time object!
 ```
 
-So this is what Entities provide. 
+So this is what Entities provide.
 
 ```ruby
 class Commit < Schemad::Entity
@@ -235,6 +235,8 @@ Note that the default attribute type (if not provided) is a string (`:string`). 
 - :time, :date, :date_time (all the same in our case)
 - :integer
 - :boolean
+
+To get these types, simply `require 'schemad/default_types'`. They are not required by default to ensure that my Schemad's type handling is what you want explicity.
 
 New types are easy to create, more on this in a moment.
 
@@ -255,7 +257,7 @@ comment.created_date  # A time object!
 
 You don't have to use the normalizers to use the `from_data` method. It can be any consistently formatted hash. The keys **must** be accessible by symbol however (use a hash with all symbols as keys or an ActiveSupport/Hashie/other [HashWithIndifferentAccess](http://api.rubyonrails.org/classes/ActiveSupport/HashWithIndifferentAccess.html) implementation).
 
-In fact, both normalizer and entity can be used independent of one another if one or the other isn't required for your use. Just include the library you want: 
+In fact, both normalizer and entity can be used independent of one another if one or the other isn't required for your use. Just include the library you want:
 
 ```ruby
 require 'schemad/type_handler'
