@@ -23,7 +23,7 @@ describe Schemad::Entity do
     context "defaults or nil get used when no data" do
 
       Then { ent.forest.should == "Green" }
-      And { ent.cool.should be_true }
+      And { ent.cool.should eq true }
       And { ent.created.should eq(Time.now) }
       And { ent.roads.should == 5 }
       And { ent.world.should == "coordinates" }

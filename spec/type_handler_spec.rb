@@ -41,14 +41,14 @@ describe Schemad::TypeHandler do
     context "knows trues" do
       Schemad::BooleanHandler::VALID_TRUTHS.each do |val|
         When(:parsed) { bool_handler.parse(val) }
-        Then { parsed.should be_true }
+        Then { parsed.should eq true }
       end
     end
 
     context "rejects falses" do
       [42, "Hello World", nil, String].each do |val|
         When(:parsed) { bool_handler.parse(val) }
-        Then { parsed.should be_false }
+        Then { parsed.should eq false }
       end
     end
   end
