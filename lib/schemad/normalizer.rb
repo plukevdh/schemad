@@ -13,7 +13,7 @@ module Schemad
       subclass.instance_variable_set(:@allowed_attributes, [])
     end
 
-    def self.include_fields(fields)
+    def self.include_fields(*fields)
       @allowed_attributes.concat fields
     end
 

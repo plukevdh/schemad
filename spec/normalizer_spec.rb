@@ -35,7 +35,7 @@ describe Schemad::Normalizer do
   end
 
   context "additional fields" do
-    Given { normalizer.class.include_fields [:beasts, :cool] }
+    Given { normalizer.class.include_fields :beasts, :cool }
     When(:normalized) { normalizer.normalize(data) }
 
     context "can be specified" do
@@ -100,7 +100,7 @@ describe Schemad::Normalizer do
     end
 
     context "can allow fields from nested data" do
-      Given { BucketNormalizer.include_fields ["author/user/display_name"] }
+      Given { BucketNormalizer.include_fields "author/user/display_name" }
       Given(:normalizer) { BucketNormalizer.new }
       When(:results) { normalizer.normalize(data) }
       Then { results[:display_name].should == "Joseph Walton" }
