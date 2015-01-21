@@ -275,6 +275,9 @@ On a side note, we have a number of very simple type handlers, you can see them 
 It is _also_ possible to use these however you want in your own classes, but there are far more complete and complex type handlers elsewhere. If you find these types unsatisfactory or wish to use additional types, you can easily define your own.
 
 ```ruby
+require 'schemad/type_handler'
+require 'schemad/abstract_handler'
+
 class YouMomHandler < Schemad::AbstractHandler
   handle :your_mom
 
