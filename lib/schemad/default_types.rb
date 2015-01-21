@@ -1,3 +1,4 @@
+require 'schemad/type_handler'
 require 'schemad/abstract_handler'
 
 require 'schemad/types/boolean_handler'
