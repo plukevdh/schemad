@@ -47,6 +47,12 @@ describe Schemad::Normalizer do
       When(:reversed) { normalizer.reverse(normalized.merge({ billy: "joel" })) }
       Then { reversed.should == expected }
     end
+
+    context "includes included_fields" do
+      Given { Demalizer.include_fields(:cool) }
+      When(:reversed) { normalizer.reverse(data) }
+      Then { reversed.should include({"cool" => "true"}) }
+    end
   end
 
   context "additional fields" do

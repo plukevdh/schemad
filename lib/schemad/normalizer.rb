@@ -52,7 +52,7 @@ module Schemad
       normalized = {}
 
       allowed_attributes.each do |key|
-        from_key = normalizers[key]
+        from_key = normalizers[key] || key
 
         normalized.deep_merge! nested_hash_from_path(key, data[from_key])
       end
