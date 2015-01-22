@@ -140,14 +140,17 @@ In step the Normalizers. For this example ee'd create two separate normalizers f
 ```ruby
 class GitHubNormalizer < Schemad::Normalizer
   normalize :id, key: :sha
-  normalize :url, key: :url
   normalize :committer, key: "committer/name"
   normalize :created_date, key: "committer/date"
   normalize :comment, key: :message
+  
+  include_fields :url
 end
 ```
 
-We could obviously also include additional data if we wanted. Notice you can use either symbols or strings as keys. If you want to do a deep traversal (more than one level), you will need to use strings with a "/" delimited path.
+We could obviously also include additional data if we wanted. Notice you can use either symbols or strings as keys. If you want to do a deep traversal (more than one level), you will need to use strings with a "/" delimited path. 
+
+Also notice that if you want fields to be included 'as is', using the same key as the dataset provided, you can use the `include_fields` method. Normalizers _only return_ data that you specify.
 
 Now for BitBucket:
 
