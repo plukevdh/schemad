@@ -34,6 +34,21 @@ describe Schemad::Normalizer do
     end
   end
 
+  context "reverse normalization" do
+    Given(:normalized) { normalizer.normalize(data) }
+    Given(:expected) { { "Middle Earth" => "COORDINATES", "roads" => 50 } }
+
+    context "for given keys" do
+      When(:reversed) { normalizer.reverse(normalized) }
+      Then { reversed.should == expected }
+    end
+
+    context "ignores extra keys" do
+      When(:reversed) { normalizer.reverse(normalized.merge({ billy: "joel" })) }
+      Then { reversed.should == expected }
+    end
+  end
+
   context "additional fields" do
     Given { normalizer.class.include_fields :beasts, :cool }
     When(:normalized) { normalizer.normalize(data) }
@@ -106,5 +121,12 @@ describe Schemad::Normalizer do
       Then { results[:display_name].should == "Joseph Walton" }
     end
 
+    context "can reverse into nested key" do
+      Given(:normalizer) { BucketNormalizer.new }
+      Given(:normalized) { normalizer.normalize(data) }
+      When(:reversed) { normalizer.reverse(normalized) }
+      Then { reversed['author']['user']['username'].should == "jwalton" }
+      And  { reversed['author']['user']['links']['avatar']['href'] == "funk_blue.png" }
+    end
   end
 end

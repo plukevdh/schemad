@@ -48,6 +48,18 @@ module Schemad
       normalized
     end
 
+    def reverse(data)
+      normalized = {}
+
+      allowed_attributes.each do |key|
+        from_key = normalizers[key]
+
+        normalized.deep_merge! nested_hash_from_path(key, data[from_key])
+      end
+
+      normalized
+    end
+
     def normalizers
       self.class.instance_variable_get(:@normalizers)
     end
@@ -57,6 +69,7 @@ module Schemad
     end
 
     private
+
     def path_steps(key)
       key.to_s.split(DELIMITER)
     end
@@ -72,6 +85,16 @@ module Schemad
         # rethrow with more info
         raise e, "Can't find value for \"#{key}\""
       end
+    end
+
+    def nested_hash_from_path(path, value)
+      build_hash path_steps(path), value, {}
+    end
+
+    def build_hash(steps, value, accum)
+      step = steps.shift
+      accum[step] = steps.empty? ? value : build_hash(steps, value, {})
+      accum
     end
 
     def search_data(steps, data)
