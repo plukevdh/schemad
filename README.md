@@ -311,9 +311,9 @@ commit.comment        # "Your Mom"
 
 ## Notes
 
-[Hashie](https://github.com/intridea/hashie) is probably a better idea than this gem. But I couldn't find a decent way to combine the [DeepFetch](https://github.com/intridea/hashie#deepfetch) functionality with the [Dash](https://github.com/intridea/hashie#dash)/[Trash](https://github.com/intridea/hashie#trash) functionality. This is also likely much ligher weight and therefore about half as meta.
+[Hashie](https://github.com/intridea/hashie) is probably a better fit for most people, but I couldn't find a decent way to combine the [DeepFetch](https://github.com/intridea/hashie#deepfetch) functionality with the [Dash](https://github.com/intridea/hashie#dash)/[Trash](https://github.com/intridea/hashie#trash) functionality. However, this gem is also likely much ligher weight and therefore about half as meta.
 
-Be warned, this is a lot of crazy metacode and it's _mostly_ recommended you don't use this for real. Mostly. But it is awesome.
+Be warned, this is a lot of crazy metacode, but it does work well for most of my use-cases (as seen in the examples above).
 
 ## Installation
 
