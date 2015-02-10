@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'timecop'
+require 'schemad/default_types'
 require 'schemad/entity'
 
 require_relative 'fixtures/demo_class'
@@ -51,6 +52,59 @@ describe Schemad::Entity do
         cool: true,
         created: Time.now
       }}
+    end
+  end
+
+  context "inherited entities" do
+    class Base < Schemad::Entity
+      attribute :name
+    end
+
+    class Sub < Base
+      attribute :place
+    end
+
+    context "via setters" do
+      Given(:parent) { Base.new }
+      Given(:child) { Sub.new }
+
+      context "parent has top-level attributes" do
+        When { parent.name = "Whil Wheaton" }
+        Then { parent.name.should == "Whil Wheaton" }
+      end
+
+      context "parent does not get child attributes" do
+        When(:result) { parent.place }
+        Then { expect(result).to have_failed(NoMethodError) }
+      end
+
+      context "child has all attributes" do
+        Given do
+          child.name = "Bill Cosby"
+          child.place = "NY, NY"
+        end
+        Then { child.name.should == "Bill Cosby" }
+        And { child.place.should == "NY, NY" }
+      end
+    end
+
+    context 'via #from_data' do
+      Given(:parent) { Base.from_data({ name: "Whil Wheaton", place: "Burt's Bees" }) }
+
+      context "parent has top-level attributes" do
+        Then { parent.name.should == "Whil Wheaton" }
+      end
+
+      context "parent does not get child attributes" do
+        When(:result) { parent.place }
+        Then { expect(result).to have_failed(NoMethodError) }
+      end
+
+      context "child has all attributes" do
+        Given(:child) { Sub.from_data({ name: "Jim Beam", place: "Black, Not" }) }
+        Then { child.name.should == "Jim Beam" }
+        And { child.place.should == "Black, Not" }
+      end
     end
   end
 end
