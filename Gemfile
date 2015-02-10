@@ -4,9 +4,11 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
+  gem "codeclimate-test-reporter", require: nil
   gem 'rspec-given'
   gem 'flexmock'
   gem 'timecop'
+
 
   gem 'pry'
 end
