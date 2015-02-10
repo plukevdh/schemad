@@ -11,6 +11,11 @@ module Schemad
       def base_class_name
         name.demodulize
       end
+
+      def inherited_var(attr_name, default)
+        parent_attrs = self.instance_variable_get(attr_name)
+        default_attrs = (parent_attrs ? parent_attrs.dup : default)
+      end
     end
 
     def base_class_name
@@ -35,5 +40,7 @@ module Schemad
     def indifferent_hash(hash)
       ActiveSupport::HashWithIndifferentAccess.new hash
     end
+
+
   end
 end

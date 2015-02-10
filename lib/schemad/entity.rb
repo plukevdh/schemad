@@ -3,10 +3,11 @@ require 'schemad/type_handler'
 
 module Schemad
   class Entity
-    extend Schemad::Extensions
+    include Schemad::Extensions
 
     def self.inherited(subclass)
-      subclass.instance_variable_set(:@attributes, inherited_attrs)
+      default_attrs = inherited_var(:@attributes, [])
+      subclass.instance_variable_set(:@attributes, default_attrs)
     end
 
     def self.attribute(name, args={}, &block)
@@ -45,10 +46,6 @@ module Schemad
     alias_method :attributes, :to_hash
 
     private
-    def self.inherited_attrs
-      parent_attrs = self.instance_variable_get(:@attributes)
-      default_attrs = (parent_attrs ? parent_attrs.dup : [])
-    end
 
     def self.define_parser_for(name, args, &block)
       define_method "parse_#{name}" do |data|

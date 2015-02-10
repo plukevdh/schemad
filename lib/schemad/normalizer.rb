@@ -9,8 +9,11 @@ module Schemad
     InvalidPath = Class.new(Exception)
 
     def self.inherited(subclass)
-      subclass.instance_variable_set(:@normalizers, {})
-      subclass.instance_variable_set(:@allowed_attributes, [])
+      default_normalizers = inherited_var(:@normalizers, {})
+      subclass.instance_variable_set(:@normalizers, default_normalizers)
+
+      default_allowed = inherited_var(:@allowed_attributes, [])
+      subclass.instance_variable_set(:@allowed_attributes, default_allowed)
     end
 
     def self.include_fields(*fields)
