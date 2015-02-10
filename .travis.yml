@@ -1,14 +1,15 @@
 language: ruby
 rvm:
-  - 2.0
-  - 2.1
-  - 1.9.3
-  - rbx
-  - jruby-19mode
-
+- 2.0
+- 2.1
+- 1.9.3
+- rbx
+- jruby-19mode
 matrix:
   allow_failures:
-    - rvm: rbx
-    - rvm: jruby-19mode
-
+  - rvm: rbx
+  - rvm: jruby-19mode
 script: bundle exec rake spec
+env:
+  global:
+    secure: oXespZsV0esupERqRSdJe6WMV4pyUtRUxKqgZZ7+lHDiLf0rUfXeJ96atyqHF293C7oApAkyoM6Lf92Vw5wDJJzdghuDMMa+e18ilHHGD0eDUB3MfDCuj6oHdCTxYs5q9L0rGPTkUcx+EVw3PeFe9CDaWHhIkvosfrdzXf9volU=
