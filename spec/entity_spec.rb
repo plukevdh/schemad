@@ -16,6 +16,20 @@ describe Schemad::Entity do
     beasts: "1337"
   }}
 
+  context "introspection" do
+    Given(:fields) { %i[forest roads beasts world cool created] }
+
+    context "on class" do
+      When(:attrs) { Ent.attribute_names }
+      Then { attrs.should == fields }
+    end
+
+    context "on instance" do
+      When(:attrs) { Ent.new.attribute_names }
+      Then { attrs.should == fields }
+    end
+  end
+
   context "#from_data" do
     Given(:ent) { Ent.from_data(normal_data) }
 
