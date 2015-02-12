@@ -69,9 +69,7 @@ module Schemad
       default_provider.call
     end
 
-    def coerce_to_type(value, type)
-      type ||= :string
-
+    def coerce_to_type(value, type=:string)
       handler = TypeHandler.new type
       handler.parse(value)
     end
