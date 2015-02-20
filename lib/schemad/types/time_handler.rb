@@ -3,6 +3,7 @@ module Schemad
     handle :time, :date, :date_time
 
     def parse(value)
+      return nil if value.nil?  # bail on nil
       return value.to_time if value.respond_to?(:to_time)
 
       begin
