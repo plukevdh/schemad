@@ -121,5 +121,15 @@ describe Schemad::TypeHandler do
       Then { result.should be_a(Time) }
       Then { result.to_i.should == date_time.to_time.to_i }
     end
+
+    context "bails on nils" do
+      When(:result) { date_handler.parse nil }
+      Then { result.should be_nil }
+    end
+
+    context "bails on empty strings" do
+      When(:result) { date_handler.parse "" }
+      Then { result.should be_nil }
+    end
   end
 end
