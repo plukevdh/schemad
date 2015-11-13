@@ -1,7 +1,9 @@
 require 'spec_helper'
 require 'schemad/normalizer'
 
-class Demalizer < Schemad::Normalizer
+class Demalizer
+  include Schemad::Normalizer
+
   normalize :world, key: "Middle Earth" do |val|
     val.upcase
   end
@@ -72,7 +74,9 @@ describe Schemad::Normalizer do
   end
 
   context "can mine nested properties" do
-    class BucketNormalizer < Schemad::Normalizer
+    class BucketNormalizer
+      include Schemad::Normalizer
+
       normalize :answer_to_the_universe, key: "useless_root"
       normalize :username, key: "author/user/username"
       normalize :avatar_url, key: "author/user/links/avatar/href"
@@ -81,7 +85,8 @@ describe Schemad::Normalizer do
       end
     end
 
-    class BadNormalizer < Schemad::Normalizer
+    class BadNormalizer
+      include Schemad::Normalizer
       # missing the "links" part of the path
       normalize :avatar_url, key: "author/user/avatar/href"
     end

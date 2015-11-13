@@ -1,4 +1,6 @@
-class Ent < Schemad::Entity
+class Ent
+  include Schemad::Entity
+
   attribute :forest, type: :string, default: "Green"
   attribute :roads, type: :integer
   attribute :beasts, type: :integer

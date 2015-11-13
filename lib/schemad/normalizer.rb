@@ -1,38 +1,51 @@
 require 'schemad/extensions'
 
 module Schemad
-  class Normalizer
+  module Normalizer
+    extend ActiveSupport::Concern
     include Schemad::Extensions
 
     DELIMITER = "/"
 
     InvalidPath = Class.new(Exception)
 
-    def self.inherited(subclass)
-      default_normalizers = inherited_var(:@normalizers, {})
-      subclass.instance_variable_set(:@normalizers, default_normalizers)
-
-      default_allowed = inherited_var(:@allowed_attributes, [])
-      subclass.instance_variable_set(:@allowed_attributes, default_allowed)
+    included do
+      instance_variable_set(:@normalizers, {})
+      instance_variable_set(:@allowed_attributes, [])
     end
 
-    def self.include_fields(*fields)
-      @allowed_attributes.concat fields
-    end
+    module ClassMethods
+      def inherited(subclass)
+        default_normalizers = inherited_var(:@normalizers, {})
+        subclass.instance_variable_set(:@normalizers, default_normalizers)
 
-    def self.normalize(name, args={}, &block)
-      lookup = args[:key] || name
-      method_name = normalizer_method_name(name)
-
-      @normalizers[lookup] = name
-      @allowed_attributes << lookup
-
-      define_method method_name do |data|
-        value = find_value lookup, data
-        return value unless block_given?
-
-        yield value
+        default_allowed = inherited_var(:@allowed_attributes, [])
+        subclass.instance_variable_set(:@allowed_attributes, default_allowed)
       end
+
+      def include_fields(*fields)
+        @allowed_attributes.concat fields
+      end
+
+      def normalize(name, args={}, &block)
+        lookup = args[:key] || name
+        method_name = normalizer_method_name(name)
+
+        @normalizers[lookup] = name
+        @allowed_attributes << lookup
+
+        define_method method_name do |data|
+          value = find_value lookup, data
+          return value unless block_given?
+
+          yield value
+        end
+      end
+
+      def normalizer_method_name(field)
+        "normalize_#{field}".to_sym
+      end
+
     end
 
     def normalize(data)
@@ -106,10 +119,6 @@ module Schemad
       raise InvalidPath if data.nil?
 
       search_data steps, data[step]
-    end
-
-    def self.normalizer_method_name(field)
-      "normalize_#{field}".to_sym
     end
 
     def normalizer_method_name(field)

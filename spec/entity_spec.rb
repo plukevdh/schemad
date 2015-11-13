@@ -70,7 +70,9 @@ describe Schemad::Entity do
   end
 
   context "inherited entities" do
-    class Base < Schemad::Entity
+    class Base
+      include Schemad::Entity
+
       attribute :name
     end
 
