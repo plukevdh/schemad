@@ -3,16 +3,12 @@ module Schemad
     handle :time, :date, :date_time
 
     def parse(value)
-      return nil if value.nil?  # bail on nil
+      return nil if value.nil? || value.blank?
       return value.to_time if value.respond_to?(:to_time)
 
-      begin
-        Time.at(value)
-      rescue TypeError => e
-        Time.parse(value)
-      rescue ArgumentError => e
-        nil
-      end
+      Time.at(value)
+    rescue TypeError => e
+      Time.parse(value)
     end
   end
 end

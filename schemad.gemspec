@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = "schemad"
   spec.version       = Schemad::VERSION
   spec.authors       = ["Luke van der Hoeven"]
-  spec.email         = ["hungerandthirst@gmail.com"]
+  spec.email         = ["hi@plukevdh.me"]
   spec.summary       = %q{Simple schema DSL for services}
   spec.description   = %q{
     This gem allows easy attribute definition, type casting and special handling
@@ -22,8 +22,8 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activesupport", "~> 4.1"
+  spec.add_dependency "activesupport", "~> 7.0"
 
-  spec.add_development_dependency "bundler", "~> 1.6"
+  spec.add_development_dependency "bundler", "~> 2.3"
   spec.add_development_dependency "rake"
 end

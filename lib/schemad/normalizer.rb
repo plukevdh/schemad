@@ -7,7 +7,7 @@ module Schemad
 
     DELIMITER = "/"
 
-    InvalidPath = Class.new(Exception)
+    InvalidPath = Class.new(StandardError)
 
     included do
       instance_variable_set(:@normalizers, {})

@@ -26,13 +26,13 @@ describe Schemad::Normalizer do
     When(:normalized) { normalizer.normalize(data) }
 
     context "maps specified keys" do
-      Then { normalized[:world].should == "COORDINATES" }
-      And { normalized[:roads].should == 50 }
+      Then { expect(normalized[:world]).to eq "COORDINATES" }
+      And { expect(normalized[:roads]).to eq 50 }
     end
 
     context "does not pass through unspecified keys" do
-      Then { normalized[:cool].should be_nil }
-      And { normalized[:beasts].should be_nil }
+      Then { expect(normalized[:cool]).to be_nil }
+      And { expect(normalized[:beasts]).to be_nil }
     end
   end
 
@@ -42,18 +42,18 @@ describe Schemad::Normalizer do
 
     context "for given keys" do
       When(:reversed) { normalizer.reverse(normalized) }
-      Then { reversed.should == expected }
+      Then { expect(reversed).to eq expected }
     end
 
     context "ignores extra keys" do
       When(:reversed) { normalizer.reverse(normalized.merge({ billy: "joel" })) }
-      Then { reversed.should == expected }
+      Then { expect(reversed).to eq expected }
     end
 
     context "includes included_fields" do
       Given { Demalizer.include_fields(:cool) }
       When(:reversed) { normalizer.reverse(data) }
-      Then { reversed.should include({"cool" => "true"}) }
+      Then { expect(reversed).to include({"cool" => "true"}) }
     end
   end
 
@@ -62,14 +62,14 @@ describe Schemad::Normalizer do
     When(:normalized) { normalizer.normalize(data) }
 
     context "can be specified" do
-      Then { normalized[:cool].should == "true" }
-      And { normalized[:beasts].should == "1337" }
+      Then { expect(normalized[:cool]).to eq "true" }
+      And { expect(normalized[:beasts]).to eq "1337" }
     end
 
     context "converts all keys to symbols" do
-      Then { normalized[:cool].should_not be_nil }
-      And { normalized[:beasts].should_not be_nil }
-      And { normalized["Middle Earth"].should be_nil }
+      Then { expect(normalized[:cool]).not_to be_nil }
+      And { expect(normalized[:beasts]).not_to be_nil }
+      And { expect(normalized["Middle Earth"]).to be_nil }
     end
   end
 
@@ -113,31 +113,31 @@ describe Schemad::Normalizer do
     context "parses paths" do
       Given(:normalizer) { BucketNormalizer.new }
       When(:results) { normalizer.normalize(data) }
-      Then { results[:username].should == "jwalton" }
-      And { results[:avatar_url].should == "funk_blue.png" }
-      And { results[:email].should == "jwalton@atlassian.com" }
-      And { results[:answer_to_the_universe].should == 42 }
+      Then { expect(results[:username]).to eq "jwalton" }
+      And { expect(results[:avatar_url]).to eq "funk_blue.png" }
+      And { expect(results[:email]).to eq "jwalton@atlassian.com" }
+      And { expect(results[:answer_to_the_universe]).to eq 42 }
     end
 
     context "bad path throws exception" do
       Given(:normalizer) { BadNormalizer.new }
       When(:results) { normalizer.normalize(data) }
-      Then { expect(results).to have_failed(Schemad::Normalizer::InvalidPath, /author\/user\/avatar\/href/) }
+      Then { results == Failure(Schemad::Normalizer::InvalidPath, /author\/user\/avatar\/href/) }
     end
 
     context "can allow fields from nested data" do
       Given { BucketNormalizer.include_fields "author/user/display_name" }
       Given(:normalizer) { BucketNormalizer.new }
       When(:results) { normalizer.normalize(data) }
-      Then { results[:display_name].should == "Joseph Walton" }
+      Then { expect(results[:display_name]).to eq "Joseph Walton" }
     end
 
     context "can reverse into nested key" do
       Given(:normalizer) { BucketNormalizer.new }
       Given(:normalized) { normalizer.normalize(data) }
       When(:reversed) { normalizer.reverse(normalized) }
-      Then { reversed['author']['user']['username'].should == "jwalton" }
-      And  { reversed['author']['user']['links']['avatar']['href'] == "funk_blue.png" }
+      Then { expect(reversed['author']['user']['username']).to eq "jwalton" }
+      And  { expect(reversed['author']['user']['links']['avatar']['href']).to eq "funk_blue.png" }
     end
   end
 end

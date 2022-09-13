@@ -21,51 +21,52 @@ describe Schemad::Entity do
 
     context "on class" do
       When(:attrs) { Ent.attribute_names }
-      Then { attrs.should == fields }
+      Then { expect(attrs).to eq(fields) }
     end
 
     context "on instance" do
       When(:attrs) { Ent.new.attribute_names }
-      Then { attrs.should == fields }
+      Then { expect(attrs).to eq fields }
     end
   end
 
   context "#from_data" do
     Given(:ent) { Ent.from_data(normal_data) }
 
-    Then { ent.attribute_names.should == [:forest, :roads, :beasts, :world, :cool, :created]}
+    Then { expect(ent.attribute_names).to eq([:forest, :roads, :beasts, :world, :cool, :created])}
 
     context "defaults or nil get used when no data" do
 
-      Then { ent.forest.should == "Green" }
-      And { ent.cool.should eq true }
-      And { ent.created.should eq(Time.now) }
-      And { ent.roads.should == 5 }
-      And { ent.world.should == "coordinates" }
+      Then { expect(ent.forest).to eq "Green" }
+      And { expect(ent.cool).to eq true }
+      And { expect(ent.created).to eq(Time.now) }
+      And { expect(ent.roads).to eq 5 }
+      And { expect(ent.world).to eq "coordinates" }
     end
 
     context "parses types" do
-      Then { ent.beasts.should == 1337 }
+      Then { expect(ent.beasts).to eq 1337 }
     end
 
     context "defines #? method for bools" do
-      Then { ent.should be_cool }
+      Then { expect(ent).to be_cool }
     end
 
     context "assumes string if no type given" do
-      Then { ent.world.should be_a(String) }
+      Then { expect(ent.world).to be_a(String) }
     end
 
     context "can get all params as a hash" do
       When(:hash) { ent.to_hash }
-      Then { hash.should == {
-        forest: "Green",
-        roads: 5,
-        beasts: 1337,
-        world: "coordinates",
-        cool: true,
-        created: Time.now
-      }}
+      Then { expect(hash).to eq({
+          forest: "Green",
+          roads: 5,
+          beasts: 1337,
+          world: "coordinates",
+          cool: true,
+          created: Time.now
+        })
+      }
     end
   end
 
@@ -86,12 +87,12 @@ describe Schemad::Entity do
 
       context "parent has top-level attributes" do
         When { parent.name = "Whil Wheaton" }
-        Then { parent.name.should == "Whil Wheaton" }
+        Then { expect(parent.name).to eq "Whil Wheaton" }
       end
 
       context "parent does not get child attributes" do
         When(:result) { parent.place }
-        Then { expect(result).to have_failed(NoMethodError) }
+        Then { result == Failure(NoMethodError) }
       end
 
       context "child has all attributes" do
@@ -99,8 +100,8 @@ describe Schemad::Entity do
           child.name = "Bill Cosby"
           child.place = "NY, NY"
         end
-        Then { child.name.should == "Bill Cosby" }
-        And { child.place.should == "NY, NY" }
+        Then { expect(child.name).to eq "Bill Cosby" }
+        And { expect(child.place).to eq "NY, NY" }
       end
     end
 
@@ -108,18 +109,18 @@ describe Schemad::Entity do
       Given(:parent) { Base.from_data({ name: "Whil Wheaton", place: "Burt's Bees" }) }
 
       context "parent has top-level attributes" do
-        Then { parent.name.should == "Whil Wheaton" }
+        Then { expect(parent.name).to eq "Whil Wheaton" }
       end
 
       context "parent does not get child attributes" do
         When(:result) { parent.place }
-        Then { expect(result).to have_failed(NoMethodError) }
+        Then { result == Failure(NoMethodError) }
       end
 
       context "child has all attributes" do
         Given(:child) { Sub.from_data({ name: "Jim Beam", place: "Black, Not" }) }
-        Then { child.name.should == "Jim Beam" }
-        And { child.place.should == "Black, Not" }
+        Then { expect(child.name).to eq "Jim Beam" }
+        And { expect(child.place).to eq "Black, Not" }
       end
     end
   end
